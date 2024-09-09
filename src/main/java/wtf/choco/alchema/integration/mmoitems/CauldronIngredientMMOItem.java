@@ -134,7 +134,7 @@ public final class CauldronIngredientMMOItem implements CauldronIngredient {
     @Override
     public CauldronIngredient adjustAmountBy(int amount) {
         Preconditions.checkArgument(amount < getAmount(), "amount must be < getAmount(), %d", getAmount());
-        return new CauldronIngredientMMOItem(mmoItem, item, getAmount() - amount);
+        return new CauldronIngredientMMOItem(mmoItem, item, getAmount() + amount);
     }
 
     @Override

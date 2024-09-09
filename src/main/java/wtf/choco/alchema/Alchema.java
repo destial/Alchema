@@ -51,6 +51,7 @@ import wtf.choco.alchema.crafting.CauldronRecipeResultItemStack;
 import wtf.choco.alchema.essence.EntityEssenceData;
 import wtf.choco.alchema.essence.EntityEssenceEffectRegistry;
 import wtf.choco.alchema.integration.mmoitems.PluginIntegrationMMOItems;
+import wtf.choco.alchema.integration.mythicmobs.PluginIntegrationMythicItems;
 import wtf.choco.alchema.listener.CauldronDeathMessageListener;
 import wtf.choco.alchema.listener.CauldronManipulationListener;
 import wtf.choco.alchema.listener.EmptyVialRecipeDiscoverListener;
@@ -115,6 +116,7 @@ public final class Alchema extends JavaPlugin {
          * For plugins like WorldGuard where registering flags must be done onLoad(), this is necessary.
          */
         this.integrationHandler.registerIntegrations("MMOItems", () -> PluginIntegrationMMOItems::new);
+        this.integrationHandler.registerIntegrations("MythicMobs", () -> PluginIntegrationMythicItems::new);
         this.integrationHandler.integrate();
 
         // Handle ingredient and result types for metrics (do this early so that third-party types aren't known)

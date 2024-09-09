@@ -771,7 +771,7 @@ public class AlchemicalCauldron {
         cauldronBlockObject.addProperty("z", cauldronBlock.getZ());
         object.add("cauldron", cauldronBlockObject);
 
-        if (ingredients.size() > 0) {
+        if (!ingredients.isEmpty()) {
             JsonArray ingredientsArray = new JsonArray();
             this.ingredients.forEach(ingredient -> {
                 JsonObject ingredientObject = ingredient.toJson();
