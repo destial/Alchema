@@ -6,14 +6,19 @@ import com.google.gson.JsonParseException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import wtf.choco.alchema.Alchema;
 
 /**
  * A series of utilities pertaining to {@link ItemStack ItemStacks}.
@@ -83,7 +88,7 @@ public final class ItemUtil {
         }
 
         String resultString = object.get("item").getAsString();
-        ItemStack result = null;
+        ItemStack result;
 
         try {
             result = Bukkit.getItemFactory().createItemStack(resultString);
@@ -96,6 +101,39 @@ public final class ItemUtil {
         }
 
         return result;
+    }
+
+    public static Map<Attribute, AttributeModifier> parseModifiers(@NotNull JsonObject object) {
+        Map<Attribute, AttributeModifier> mods = new HashMap<>();
+        for (String key : object.keySet()) {
+            JsonObject modifier = object.getAsJsonObject(key);
+            Attribute attribute;
+            try {
+                attribute = Attribute.valueOf("GENERIC_" + key.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                Alchema.getInstance().getLogger().warning("Attribute of " + key + " was not found!");
+                continue;
+            }
+
+            String op = modifier.get("operation").getAsString().toLowerCase();
+            AttributeModifier.Operation operation = switch (op) {
+                case "multiply", "multi", "scale" -> AttributeModifier.Operation.ADD_SCALAR;
+                default -> AttributeModifier.Operation.ADD_NUMBER;
+            };
+
+            double amount;
+            try {
+                amount = modifier.get("amount").getAsDouble();
+            } catch (IllegalArgumentException e) {
+                Alchema.getInstance().getLogger().warning("Amount from modifier " + key + " was not found!");
+                continue;
+            }
+
+            AttributeModifier mod = new AttributeModifier(attribute.name(), amount, operation);
+            mods.put(attribute, mod);
+        }
+
+        return mods;
     }
 
 }

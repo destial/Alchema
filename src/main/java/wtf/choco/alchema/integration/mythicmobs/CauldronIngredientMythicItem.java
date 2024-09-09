@@ -10,12 +10,16 @@ import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import wtf.choco.alchema.crafting.CauldronIngredient;
+import wtf.choco.alchema.util.ItemUtil;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -31,6 +35,7 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
 
     private final MythicItem mythicItem;
     private final ItemStack item;
+    private Map<Attribute, AttributeModifier> modifiers;
 
     /**
      * Construct a new {@link CauldronIngredientMythicItem} with a given amount and {@link ItemStack}.
@@ -59,6 +64,10 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
         this.mythicItem = MythicBukkit.inst().getItemManager().getItem(object.get("id").getAsString()).orElse(null);
         if (mythicItem == null) {
             throw new JsonParseException("MythicItems item id \"" + object.get("id").getAsString() + "\"");
+        }
+
+        if (object.has("modifiers")) {
+            this.modifiers = ItemUtil.parseModifiers(object.getAsJsonObject("modifiers"));
         }
 
         this.item = BukkitAdapter.adapt(mythicItem.generateItemStack(object.has("amount") ? object.get("amount").getAsInt() : 1));
@@ -151,7 +160,11 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
 
     @Override
     public String toString() {
-        return String.format("CauldronIngredientMythicItem[amount=%s, item=%s, mythicItem=%s]", getAmount(), item, mythicItem);
+        return String.format("CauldronIngredientMythicItem[amount=%s, item=%s, mythicItem=%s, modifiers=%s]", getAmount(), item, mythicItem, modifiers);
     }
 
+    @Nullable
+    public Map<Attribute, AttributeModifier> getModifiers() {
+        return modifiers;
+    }
 }

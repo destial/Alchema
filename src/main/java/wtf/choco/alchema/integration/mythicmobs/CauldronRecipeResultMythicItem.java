@@ -29,6 +29,12 @@ public final class CauldronRecipeResultMythicItem implements CauldronRecipeResul
     private final MythicItem mythicItem;
     private final ItemStack item;
 
+    public CauldronRecipeResultMythicItem(@NotNull MythicItem mythicItem, @NotNull ItemStack item, int amount) {
+        this.mythicItem = mythicItem;
+        this.item = item;
+        this.item.setAmount(amount);
+    }
+
     /**
      * Construct a new {@link CauldronRecipeResultMythicItem} with a given amount. The {@link ItemStack}
      * will be newly created.
