@@ -1,19 +1,17 @@
 package wtf.choco.alchema.cauldron;
 
 import com.google.common.base.Preconditions;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
-
 import wtf.choco.alchema.Alchema;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manages instances of {@link AlchemicalCauldron} in any given world.

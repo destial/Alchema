@@ -2,23 +2,24 @@ package wtf.choco.alchema.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import wtf.choco.alchema.Alchema;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectInputStream;
-import org.bukkit.util.io.BukkitObjectOutputStream;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
-import wtf.choco.alchema.Alchema;
 
 /**
  * A series of utilities pertaining to {@link ItemStack ItemStacks}.
@@ -67,7 +68,7 @@ public final class ItemUtil {
             if (read instanceof ItemStack itemStack) {
                 return itemStack;
             }
-        } catch (IOException | ClassNotFoundException e) { }
+        } catch (IOException | ClassNotFoundException ignored) { }
 
         return new ItemStack(Material.AIR);
     }
@@ -101,6 +102,40 @@ public final class ItemUtil {
         }
 
         return result;
+    }
+
+    public static int getMaxUpgrades(Player player) {
+        int highestMultiplier = 1;
+        if (player == null)
+            return highestMultiplier;
+
+        for (PermissionAttachmentInfo info : player.getEffectivePermissions()) {
+            if (!info.getValue())
+                continue;
+
+            String perm = info.getPermission();
+            if (!perm.startsWith(AlchemaConstants.PERMISSION_UPGRADES))
+                continue;
+
+            String multi = perm.replace(AlchemaConstants.PERMISSION_UPGRADES, "");
+            int m = Integer.parseInt(multi);
+
+            if (m > highestMultiplier) {
+                highestMultiplier = m;
+            }
+        }
+        return highestMultiplier;
+    }
+
+    public static JsonObject toJsonModifiers(Map<Attribute, AttributeModifier> modifiers) {
+        JsonObject jsonObject = new JsonObject();
+        for (Map.Entry<Attribute, AttributeModifier> entry : modifiers.entrySet()) {
+            JsonObject mod = new JsonObject();
+            mod.addProperty("operation", entry.getValue().getOperation() == AttributeModifier.Operation.ADD_NUMBER ? "add" : "scale");
+            mod.addProperty("amount", entry.getValue().getAmount());
+            jsonObject.add(entry.getKey().name().replace("GENERIC_", "").toLowerCase(), mod);
+        }
+        return jsonObject;
     }
 
     public static Map<Attribute, AttributeModifier> parseModifiers(@NotNull JsonObject object) {

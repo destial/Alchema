@@ -1,12 +1,10 @@
 package wtf.choco.alchema.api.event.entity;
 
 import com.google.common.base.Preconditions;
-
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityEvent;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
 import wtf.choco.alchema.essence.EntityEssenceEffectRegistry;
 

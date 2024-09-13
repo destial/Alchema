@@ -1,7 +1,5 @@
 package wtf.choco.alchema.util;
 
-import java.util.Collection;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -11,7 +9,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.api.event.CauldronBubbleEvent;
 import wtf.choco.alchema.api.event.CauldronIngredientAddEvent;
 import wtf.choco.alchema.api.event.CauldronIngredientsDropEvent;
@@ -27,6 +24,8 @@ import wtf.choco.alchema.crafting.CauldronIngredient;
 import wtf.choco.alchema.crafting.CauldronRecipe;
 import wtf.choco.alchema.crafting.CauldronRecipeRegistry;
 import wtf.choco.alchema.essence.EntityEssenceData;
+
+import java.util.Collection;
 
 /**
  * A utility class to more easily call the various events in Alchema.

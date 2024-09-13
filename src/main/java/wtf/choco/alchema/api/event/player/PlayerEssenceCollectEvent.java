@@ -1,7 +1,6 @@
 package wtf.choco.alchema.api.event.player;
 
 import com.google.common.base.Preconditions;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -10,7 +9,6 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.essence.EntityEssenceData;
 
 /**

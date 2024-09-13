@@ -14,7 +14,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.api.event.CauldronIngredientsDropEvent;
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;

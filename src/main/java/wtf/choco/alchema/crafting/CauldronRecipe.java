@@ -5,11 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ExperienceOrb;
@@ -19,10 +14,13 @@ import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
 import wtf.choco.commons.util.NamespacedKeyUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a recipe that may be crafted in an {@link AlchemicalCauldron}.
@@ -37,8 +35,7 @@ public interface CauldronRecipe {
      *
      * @return the key
      */
-    @NotNull
-    public NamespacedKey getKey();
+    @NotNull NamespacedKey getKey();
 
     /**
      * Get the result of this recipe.
@@ -50,39 +47,35 @@ public interface CauldronRecipe {
     @NotNull
     @ScheduledForRemoval(inVersion = "1.4.0")
     @Deprecated(since = "1.3.0", forRemoval = true)
-    public ItemStack getResult();
+    ItemStack getResult();
 
     /**
      * Get the result of this recipe.
      *
      * @return the result
      */
-    @NotNull
-    public CauldronRecipeResult getRecipeResult();
+    @NotNull CauldronRecipeResult getRecipeResult();
 
     /**
      * Get the name of this recipe.
      *
      * @return the recipe name
      */
-    @NotNull
-    public Optional<@NotNull String> getName();
+    @NotNull Optional<@NotNull String> getName();
 
     /**
      * Get the description of this recipe.
      *
      * @return the recipe description
      */
-    @NotNull
-    public Optional<@NotNull String> getDescription();
+    @NotNull Optional<@NotNull String> getDescription();
 
     /**
      * Get the comment for this recipe if one is set.
      *
      * @return the comment
      */
-    @NotNull
-    public Optional<@NotNull String> getComment();
+    @NotNull Optional<@NotNull String> getComment();
 
     /**
      * Get the permission node required by a player in order to craft this recipe
@@ -90,15 +83,14 @@ public interface CauldronRecipe {
      *
      * @return the crafting permission
      */
-    @NotNull
-    public String getCraftingPermission();
+    @NotNull String getCraftingPermission();
 
     /**
      * Get the experience yielded from this recipe.
      *
      * @return the experience
      */
-    public int getExperience();
+    int getExperience();
 
     /**
      * Check whether this recipe contains the specified ingredient. Quantity is not
@@ -108,7 +100,7 @@ public interface CauldronRecipe {
      *
      * @return true if the ingredient is present
      */
-    public boolean hasIngredient(@NotNull CauldronIngredient ingredient);
+    boolean hasIngredient(@NotNull CauldronIngredient ingredient);
 
     /**
      * Get an unmodifiable set of all required ingredients.
@@ -117,7 +109,7 @@ public interface CauldronRecipe {
      */
     @NotNull
     @Unmodifiable
-    public List<@NotNull CauldronIngredient> getIngredients();
+    List<@NotNull CauldronIngredient> getIngredients();
 
     /**
      * Get the numerical complexity of this recipe.
@@ -127,7 +119,7 @@ public interface CauldronRecipe {
      *
      * @return the complexity. Higher numbers are more complex. Will always be {@literal >=} 0
      */
-    public int getComplexity();
+    int getComplexity();
 
     /**
      * Get the expected yield (i.e. quantity of result) that may be produced such that the provided
@@ -137,7 +129,7 @@ public interface CauldronRecipe {
      *
      * @return the recipe yield
      */
-    public int getYieldFromIngredients(@NotNull List<@NotNull CauldronIngredient> availableIngredients);
+    int getYieldFromIngredients(@NotNull List<@NotNull CauldronIngredient> availableIngredients);
 
     /**
      * Create a new CauldronRecipe builder instance.
@@ -148,7 +140,7 @@ public interface CauldronRecipe {
      * @return the builder instance
      */
     @NotNull
-    public static CauldronRecipe.Builder builder(@NotNull NamespacedKey key, @NotNull ItemStack result) {
+    static CauldronRecipe.Builder builder(@NotNull NamespacedKey key, @NotNull ItemStack result) {
         return builder(key, new CauldronRecipeResultItemStack(result));
     }
 
@@ -161,7 +153,7 @@ public interface CauldronRecipe {
      * @return the builder instance
      */
     @NotNull
-    public static CauldronRecipe.Builder builder(@NotNull NamespacedKey key, @NotNull CauldronRecipeResult result) {
+    static CauldronRecipe.Builder builder(@NotNull NamespacedKey key, @NotNull CauldronRecipeResult result) {
         Preconditions.checkArgument(key != null, "key must not be null");
         Preconditions.checkArgument(result != null, "result must not be null");
 
@@ -179,7 +171,7 @@ public interface CauldronRecipe {
      * @return the cauldron recipe
      */
     @NotNull
-    public static CauldronRecipe fromJson(@NotNull NamespacedKey key, @NotNull JsonObject object, @NotNull CauldronRecipeRegistry recipeRegistry) {
+    static CauldronRecipe fromJson(@NotNull NamespacedKey key, @NotNull JsonObject object, @NotNull CauldronRecipeRegistry recipeRegistry) {
         Preconditions.checkArgument(key != null, "key cannot be null");
         Preconditions.checkArgument(object != null, "object cannot be null");
 
@@ -247,7 +239,7 @@ public interface CauldronRecipe {
     /**
      * A builder for immutable {@link CauldronRecipe} instances.
      */
-    public static final class Builder {
+    final class Builder {
 
         private String name = null, description = null, comment = null;
         private int experience = 0;

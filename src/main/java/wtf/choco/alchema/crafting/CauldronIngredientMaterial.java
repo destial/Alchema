@@ -3,16 +3,19 @@ package wtf.choco.alchema.crafting;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-
-import java.util.Objects;
-
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import wtf.choco.alchema.Alchema;
+import wtf.choco.alchema.util.ItemUtil;
+
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link CauldronIngredient} implementation wrapped around {@link Material}.
@@ -28,6 +31,7 @@ public class CauldronIngredientMaterial implements CauldronIngredient {
 
     private final Material material;
     private final int amount;
+    private Map<Attribute, AttributeModifier> modifiers;
 
     /**
      * Construct a new {@link CauldronIngredientMaterial} with a given amount.
@@ -70,6 +74,10 @@ public class CauldronIngredientMaterial implements CauldronIngredient {
 
         if (material == null) {
             throw new JsonParseException("Could not find material with id " + object.get("item").getAsString());
+        }
+
+        if (object.has("modifiers")) {
+            this.modifiers = ItemUtil.parseModifiers(object.getAsJsonObject("modifiers"));
         }
     }
 
@@ -126,8 +134,16 @@ public class CauldronIngredientMaterial implements CauldronIngredient {
 
         object.addProperty("item", material.getKey().toString());
         object.addProperty("amount", amount);
+        if (modifiers != null)
+            object.add("modifiers", ItemUtil.toJsonModifiers(modifiers));
 
         return object;
+    }
+
+    @Nullable
+    @Override
+    public Map<Attribute, AttributeModifier> getModifiers() {
+        return modifiers;
     }
 
     @Override

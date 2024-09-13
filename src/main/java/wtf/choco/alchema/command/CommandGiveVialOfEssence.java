@@ -1,12 +1,5 @@
 package wtf.choco.alchema.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,11 +18,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.essence.EntityEssenceData;
 import wtf.choco.alchema.util.AlchemaConstants;
 import wtf.choco.commons.util.NamespacedKeyUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static wtf.choco.alchema.Alchema.CHAT_PREFIX;
 

@@ -1,9 +1,6 @@
 package wtf.choco.alchema.api.event;
 
 import com.google.common.base.Preconditions;
-
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Item;
@@ -11,10 +8,11 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
 import wtf.choco.alchema.crafting.CauldronIngredient;
 import wtf.choco.alchema.crafting.CauldronIngredientItemStack;
+
+import java.util.UUID;
 
 /**
  * Called when an {@link Item} consumed by an {@link AlchemicalCauldron} and an ingredient

@@ -1,10 +1,6 @@
 package wtf.choco.alchema.essence;
 
 import com.google.common.base.Preconditions;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -23,10 +19,12 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.persistence.AlchemaPersistentDataTypes;
 import wtf.choco.alchema.util.AlchemaConstants;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents information about entity essence bottles and its properties.

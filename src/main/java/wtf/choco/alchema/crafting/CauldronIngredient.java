@@ -1,22 +1,23 @@
 package wtf.choco.alchema.crafting;
 
 import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.api.event.CauldronIngredientAddEvent;
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Represents an ingredient usable in an {@link AlchemicalCauldron} defined by a
@@ -43,14 +44,14 @@ public interface CauldronIngredient {
      * @return the ingredient key
      */
     @NotNull
-    public NamespacedKey getKey();
+    NamespacedKey getKey();
 
     /**
      * Get the amount of this ingredient.
      *
      * @return the ingredient amount
      */
-    public int getAmount();
+    int getAmount();
 
     /**
      * Get this ingredient represented as an {@link ItemStack}, if possible.
@@ -58,7 +59,7 @@ public interface CauldronIngredient {
      * @return the item stack. null if no item stack representation
      */
     @Nullable
-    public ItemStack asItemStack();
+    ItemStack asItemStack();
 
     /**
      * Check whether this ingredient is similar to the provided ingredient. The
@@ -68,7 +69,7 @@ public interface CauldronIngredient {
      *
      * @return true if similar, false otherwise
      */
-    public boolean isSimilar(@NotNull CauldronIngredient other);
+    boolean isSimilar(@NotNull CauldronIngredient other);
 
     /**
      * Merge this ingredient with another ingredient. The result of this method
@@ -80,7 +81,7 @@ public interface CauldronIngredient {
      * @return the merged ingredient
      */
     @NotNull
-    public CauldronIngredient merge(@NotNull CauldronIngredient other);
+    CauldronIngredient merge(@NotNull CauldronIngredient other);
 
     /**
      * Return a new cauldron ingredient with the amount changed by the specified
@@ -93,7 +94,7 @@ public interface CauldronIngredient {
      * @return the new ingredient
      */
     @NotNull
-    public CauldronIngredient adjustAmountBy(int amount);
+    CauldronIngredient adjustAmountBy(int amount);
 
     /**
      * Drop this ingredient as one or more {@link Item} from the provided cauldron.
@@ -109,7 +110,7 @@ public interface CauldronIngredient {
      * list should be empty, never null
      */
     @NotNull
-    public default List<@NotNull Item> drop(@NotNull AlchemicalCauldron cauldron, @NotNull World world, @NotNull Location location) {
+    default List<@NotNull Item> drop(@NotNull AlchemicalCauldron cauldron, @NotNull World world, @NotNull Location location) {
         ItemStack itemStack = asItemStack();
 
         List<Item> droppedItems = new ArrayList<>();
@@ -134,7 +135,7 @@ public interface CauldronIngredient {
      *
      * @return the ingredient complexity
      */
-    public default int getComplexity() {
+    default int getComplexity() {
         return getAmount();
     }
 
@@ -147,7 +148,7 @@ public interface CauldronIngredient {
      * @return the description string
      */
     @NotNull
-    public default String describe() {
+    default String describe() {
         ItemStack itemStack = asItemStack();
         return itemStack != null ? getAmount() + "x " + StringUtils.capitalize(itemStack.getType().getKey().getKey().replace('_', ' ')) : "???";
     }
@@ -158,6 +159,11 @@ public interface CauldronIngredient {
      * @return the serialized json
      */
     @NotNull
-    public JsonObject toJson();
+    JsonObject toJson();
+
+    @Nullable
+    default Map<Attribute, AttributeModifier> getModifiers() {
+        return null;
+    }
 
 }

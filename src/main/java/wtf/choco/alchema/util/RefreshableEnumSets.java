@@ -1,15 +1,14 @@
 package wtf.choco.alchema.util;
 
-import java.util.List;
-import java.util.function.Supplier;
-
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.commons.collection.RefreshableEnumSet;
 import wtf.choco.commons.util.NamespacedKeyUtil;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * A set of utility methods to create {@link RefreshableEnumSet RefreshableEnumSets}.

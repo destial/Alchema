@@ -3,22 +3,23 @@ package wtf.choco.alchema.integration.mmoitems;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-
-import java.util.Objects;
-
 import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.api.Type;
 import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
-
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.crafting.CauldronIngredient;
+import wtf.choco.alchema.util.ItemUtil;
+
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link CauldronIngredient} implementation wrapped around an {@link MMOItem}.
@@ -33,6 +34,7 @@ public final class CauldronIngredientMMOItem implements CauldronIngredient {
 
     private final MMOItem mmoItem;
     private final ItemStack item;
+    private Map<Attribute, AttributeModifier> modifiers;
 
     /**
      * Construct a new {@link CauldronIngredientMMOItem} with a given amount and {@link ItemStack}.
@@ -95,6 +97,16 @@ public final class CauldronIngredientMMOItem implements CauldronIngredient {
 
         this.item = mmoItem.newBuilder().build();
         this.item.setAmount(object.has("amount") ? object.get("amount").getAsInt() : 1);
+
+        if (object.has("modifiers")) {
+            this.modifiers = ItemUtil.parseModifiers(object.getAsJsonObject("modifiers"));
+        }
+    }
+
+    @Nullable
+    @Override
+    public Map<Attribute, AttributeModifier> getModifiers() {
+        return modifiers;
     }
 
     @NotNull
@@ -108,9 +120,8 @@ public final class CauldronIngredientMMOItem implements CauldronIngredient {
         return item.getAmount();
     }
 
-    @Nullable
     @Override
-    public ItemStack asItemStack() {
+    public @NotNull ItemStack asItemStack() {
         return item;
     }
 
@@ -161,6 +172,8 @@ public final class CauldronIngredientMMOItem implements CauldronIngredient {
         object.addProperty("item_type", mmoItem.getType().getId());
         object.addProperty("id", mmoItem.getId());
         object.addProperty("amount", getAmount());
+        if (modifiers != null)
+            object.add("modifiers", ItemUtil.toJsonModifiers(modifiers));
 
         return object;
     }

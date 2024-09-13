@@ -1,19 +1,6 @@
 package wtf.choco.alchema.command;
 
 import com.google.common.base.Preconditions;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -26,7 +13,6 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.api.event.CauldronRecipeRegisterEvent;
 import wtf.choco.alchema.cauldron.CauldronUpdateHandler;
@@ -36,6 +22,18 @@ import wtf.choco.commons.integration.PluginIntegration;
 import wtf.choco.commons.util.UpdateChecker;
 import wtf.choco.commons.util.UpdateChecker.UpdateReason;
 import wtf.choco.commons.util.UpdateChecker.UpdateResult;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class CommandAlchema implements TabExecutor {
 

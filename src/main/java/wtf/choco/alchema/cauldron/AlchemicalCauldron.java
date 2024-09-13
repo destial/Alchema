@@ -5,24 +5,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Predicate;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -53,7 +38,6 @@ import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.api.event.CauldronIngredientAddEvent;
 import wtf.choco.alchema.api.event.CauldronIngredientsDropEvent;
@@ -75,6 +59,19 @@ import wtf.choco.alchema.util.AlchemaEventFactory;
 import wtf.choco.alchema.util.EssenceUtil;
 import wtf.choco.commons.util.MathUtil;
 import wtf.choco.commons.util.NamespacedKeyUtil;
+
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 
 /**
  * Represents a special cauldron provided by Alchema. These cauldrons require a source
@@ -98,8 +95,9 @@ public class AlchemicalCauldron {
     private UUID lastInteractedUUID;
     private Reference<@Nullable OfflinePlayer> lastInteracted = new WeakReference<>(null);
 
-    private Block cauldronBlock, heatSourceBlock;
-    private BoundingBox itemConsumptionBounds;
+    private final Block cauldronBlock;
+    private final Block heatSourceBlock;
+    private final BoundingBox itemConsumptionBounds;
 
     private final List<@NotNull CauldronIngredient> ingredients = new ArrayList<>();
 
@@ -594,8 +592,7 @@ public class AlchemicalCauldron {
         }
 
         // If the cauldron is not yet bubbling or heating up, attempt to heat it up
-        if (!isBubbling() && !isHeatingUp()) {
-            this.attemptToHeatUp();
+        if (!isBubbling() && !isHeatingUp() && attemptToHeatUp()) {
             return;
         }
 
@@ -617,7 +614,7 @@ public class AlchemicalCauldron {
                     // Don't collect non-player-sourced items (configuration based)
                     UUID itemThrowerUUID = item.getThrower();
                     OfflinePlayer itemThrower = (itemThrowerUUID != null) ? Bukkit.getOfflinePlayer(itemThrowerUUID) : null;
-                    if (cauldronConfiguration.shouldEnforcePlayerDroppedItems() && (itemThrowerUUID == null || itemThrower == null)) {
+                    if (cauldronConfiguration.shouldEnforcePlayerDroppedItems() && itemThrowerUUID == null) {
                         return;
                     }
 

@@ -1,19 +1,17 @@
 package wtf.choco.alchema.api.event;
 
 import com.google.common.base.Preconditions;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Called when a cauldron drops its ingredients in the world.

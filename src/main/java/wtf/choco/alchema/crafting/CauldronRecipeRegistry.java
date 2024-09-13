@@ -5,6 +5,22 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
+import wtf.choco.alchema.Alchema;
+import wtf.choco.alchema.api.event.CauldronRecipeRegisterEvent;
+import wtf.choco.alchema.cauldron.AlchemicalCauldron;
+import wtf.choco.alchema.util.AlchemaConstants;
+import wtf.choco.alchema.util.AlchemaEventFactory;
+import wtf.choco.commons.util.NamespacedKeyUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,24 +36,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
-
-import wtf.choco.alchema.Alchema;
-import wtf.choco.alchema.api.event.CauldronRecipeRegisterEvent;
-import wtf.choco.alchema.cauldron.AlchemicalCauldron;
-import wtf.choco.alchema.util.AlchemaConstants;
-import wtf.choco.alchema.util.AlchemaEventFactory;
-import wtf.choco.commons.util.NamespacedKeyUtil;
-
 /**
  * Represents a registry in which recipes and recipe types may be registered.
  *
@@ -45,13 +43,13 @@ import wtf.choco.commons.util.NamespacedKeyUtil;
  */
 public class CauldronRecipeRegistry {
 
-    private static final Gson GSON = new Gson();
+    public static final Gson GSON = new Gson();
 
     private boolean acceptingRegistrations = true;
 
     private final Map<@NotNull NamespacedKey, @NotNull CauldronRecipe> recipes = new HashMap<>();
-    private final Map<@NotNull NamespacedKey, Function<@NotNull JsonObject, @NotNull ? extends CauldronIngredient>> ingredientTypes = new HashMap<>();
-    private final Map<@NotNull NamespacedKey, Function<@NotNull JsonObject, @NotNull ? extends CauldronRecipeResult>> resultTypes = new HashMap<>();
+    private final Map<@NotNull NamespacedKey, Function<@NotNull JsonObject, ? extends @NotNull CauldronIngredient>> ingredientTypes = new HashMap<>();
+    private final Map<@NotNull NamespacedKey, Function<@NotNull JsonObject, ? extends @NotNull CauldronRecipeResult>> resultTypes = new HashMap<>();
 
     /**
      * Register a {@link CauldronRecipe} to be used by any {@link AlchemicalCauldron}.
@@ -217,7 +215,7 @@ public class CauldronRecipeRegistry {
      * @param key the ingredient key. Should match that of {@link CauldronIngredient#getKey()}
      * @param ingredientProvider the ingredient provider
      */
-    public void registerIngredientType(@NotNull NamespacedKey key, @NotNull Function<@NotNull JsonObject, @NotNull ? extends CauldronIngredient> ingredientProvider) {
+    public void registerIngredientType(@NotNull NamespacedKey key, @NotNull Function<@NotNull JsonObject, ? extends @NotNull CauldronIngredient> ingredientProvider) {
         Preconditions.checkArgument(key != null, "key must not be null");
         Preconditions.checkArgument(ingredientProvider != null, "ingredientProvider must not be null");
 
@@ -242,7 +240,7 @@ public class CauldronRecipeRegistry {
         Preconditions.checkArgument(key != null, "key must not be null");
         Preconditions.checkArgument(object != null, "object must not be null");
 
-        Function<@NotNull JsonObject, @NotNull ? extends CauldronIngredient> ingredientProvider = ingredientTypes.get(key);
+        Function<@NotNull JsonObject, ? extends @NotNull CauldronIngredient> ingredientProvider = ingredientTypes.get(key);
         if (ingredientProvider == null) {
             return null;
         }
@@ -279,7 +277,7 @@ public class CauldronRecipeRegistry {
      * @param key the ingredient key. Should match that of {@link CauldronRecipeResult#getKey()}
      * @param resultProvider the result provider
      */
-    public void registerResultType(@NotNull NamespacedKey key, @NotNull Function<@NotNull JsonObject, @NotNull ? extends CauldronRecipeResult> resultProvider) {
+    public void registerResultType(@NotNull NamespacedKey key, @NotNull Function<@NotNull JsonObject, ? extends @NotNull CauldronRecipeResult> resultProvider) {
         Preconditions.checkArgument(key != null, "key must not be null");
         Preconditions.checkArgument(resultProvider != null, "ingredientProvider must not be null");
 
@@ -304,7 +302,7 @@ public class CauldronRecipeRegistry {
         Preconditions.checkArgument(key != null, "key must not be null");
         Preconditions.checkArgument(object != null, "object must not be null");
 
-        Function<@NotNull JsonObject, @NotNull ? extends CauldronRecipeResult> resultProvider = resultTypes.get(key);
+        Function<@NotNull JsonObject, ? extends @NotNull CauldronRecipeResult> resultProvider = resultTypes.get(key);
         if (resultProvider == null) {
             return null;
         }
@@ -403,21 +401,7 @@ public class CauldronRecipeRegistry {
                 continue;
             }
 
-            String fileName = recipeFile.getName();
-            fileName = fileName.substring(0, fileName.indexOf(".json"));
-
-            String joinedRecipeKey = null;
-            if (recipesDirectory.equals(subdirectory)) {
-                joinedRecipeKey = fileName; // The root directory is too short to substring itself + 1
-            } else {
-                /*
-                 * Converts file paths to valid keys. Example:
-                 *
-                 * Given: File#getAbsolutePath() (C:\Users\foo\bar\baz)
-                 * Parsed: bar/baz + / + fileName
-                 */
-                joinedRecipeKey = subdirectory.getAbsolutePath().substring(recipesDirectory.getAbsolutePath().length() + 1).replace('\\', '/') + "/" + fileName;
-            }
+            String joinedRecipeKey = getRecipeKey(recipesDirectory, subdirectory, recipeFile);
 
             if (!NamespacedKeyUtil.isValidKey(joinedRecipeKey)) {
                 plugin.getLogger().warning("Invalid recipe file name, \"" + recipeFile.getName() + "\". Must be alphanumerical, lowercased and separated by underscores.");
@@ -440,8 +424,27 @@ public class CauldronRecipeRegistry {
         return result;
     }
 
+    private @NotNull String getRecipeKey(@NotNull File recipesDirectory, File subdirectory, File recipeFile) {
+        String fileName = recipeFile.getName();
+        fileName = fileName.substring(0, fileName.indexOf(".json"));
 
-    private class StandardRecipeLoadResult implements RecipeLoadResult {
+        String joinedRecipeKey;
+        if (recipesDirectory.equals(subdirectory)) {
+            joinedRecipeKey = fileName; // The root directory is too short to substring itself + 1
+        } else {
+            /*
+             * Converts file paths to valid keys. Example:
+             *
+             * Given: File#getAbsolutePath() (C:\Users\foo\bar\baz)
+             * Parsed: bar/baz + / + fileName
+             */
+            joinedRecipeKey = subdirectory.getAbsolutePath().substring(recipesDirectory.getAbsolutePath().length() + 1).replace('\\', '/') + "/" + fileName;
+        }
+        return joinedRecipeKey;
+    }
+
+
+    public static class StandardRecipeLoadResult implements RecipeLoadResult {
 
         private int nativelyRegistered, thirdPartyRegistered;
         private long timeToComplete;

@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.crafting.CauldronIngredient;
 import wtf.choco.alchema.util.ItemUtil;
 
@@ -66,11 +67,12 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
             throw new JsonParseException("MythicItems item id \"" + object.get("id").getAsString() + "\"");
         }
 
+        this.item = BukkitAdapter.adapt(mythicItem.generateItemStack(object.has("amount") ? object.get("amount").getAsInt() : 1));
+
         if (object.has("modifiers")) {
             this.modifiers = ItemUtil.parseModifiers(object.getAsJsonObject("modifiers"));
+            Alchema.getInstance().getLogger().info("Ingredient " + mythicItem.getInternalName() + " has upgrade modifiers with " + modifiers.keySet());
         }
-
-        this.item = BukkitAdapter.adapt(mythicItem.generateItemStack(object.has("amount") ? object.get("amount").getAsInt() : 1));
     }
 
     @NotNull
@@ -84,7 +86,7 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
         return item.getAmount();
     }
 
-    @Nullable
+    @NotNull
     @Override
     public ItemStack asItemStack() {
         return item;
@@ -136,6 +138,8 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
 
         object.addProperty("id", mythicItem.getInternalName());
         object.addProperty("amount", getAmount());
+        if (modifiers != null)
+            object.add("modifiers", ItemUtil.toJsonModifiers(modifiers));
 
         return object;
     }
@@ -164,7 +168,12 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
     }
 
     @Nullable
+    @Override
     public Map<Attribute, AttributeModifier> getModifiers() {
         return modifiers;
+    }
+
+    public void setModifiers(Map<Attribute, AttributeModifier> modifiers) {
+        this.modifiers = modifiers;
     }
 }

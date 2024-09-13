@@ -3,16 +3,17 @@ package wtf.choco.alchema.crafting;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-
-import java.util.Base64;
-import java.util.Objects;
-
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.util.ItemUtil;
+
+import java.util.Base64;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link CauldronIngredient} implementation wrapped around an {@link ItemStack}.
@@ -25,7 +26,7 @@ public class CauldronIngredientItemStack implements CauldronIngredient {
 
     /** The {@link NamespacedKey} used for this ingredient type */
     public static final NamespacedKey KEY = Alchema.key("item");
-
+    private Map<Attribute, AttributeModifier> modifiers;
     private final ItemStack item;
 
     /**
@@ -64,6 +65,9 @@ public class CauldronIngredientItemStack implements CauldronIngredient {
 
         this.item = ItemUtil.deserialize(Base64.getDecoder().decode(object.get("item_base64").getAsString()));
         this.item.setAmount(object.has("amount") ? Math.max(object.get("amount").getAsInt(), 1) : 1);
+        if (object.has("modifiers")) {
+            this.modifiers = ItemUtil.parseModifiers(object.getAsJsonObject("modifiers"));
+        }
     }
 
     @NotNull
@@ -109,6 +113,8 @@ public class CauldronIngredientItemStack implements CauldronIngredient {
 
         object.addProperty("item_base64", Base64.getEncoder().encodeToString(ItemUtil.serialize(item)));
         object.addProperty("amount", getAmount()); // Adjust "amount" to match getAmount()
+        if (modifiers != null)
+            object.add("modifiers", ItemUtil.toJsonModifiers(modifiers));
 
         return object;
     }

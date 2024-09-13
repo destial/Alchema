@@ -1,13 +1,12 @@
 package wtf.choco.alchema.util;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.Alchema;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A utility class containing methods that relate to essence.

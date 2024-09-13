@@ -1,10 +1,5 @@
 package wtf.choco.alchema.essence;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.Location;
@@ -25,6 +20,11 @@ import org.bukkit.loot.LootTables;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.ApiStatus.Internal;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Represents a set of constant {@link EssenceConsumptionCallback EssenceConsumptionCallbacks}

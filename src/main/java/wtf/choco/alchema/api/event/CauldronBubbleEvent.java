@@ -3,7 +3,6 @@ package wtf.choco.alchema.api.event;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
 
 /**

@@ -1,13 +1,11 @@
 package wtf.choco.alchema.util;
 
 import com.google.common.collect.ImmutableList;
-
-import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-
 import wtf.choco.alchema.Alchema;
+
+import java.util.List;
 
 /**
  * Various constants for the Alchema plugin. Non-documented but field names should
@@ -175,6 +173,10 @@ public final class AlchemaConstants {
 
     /** Permission node, alchema.craft, allows a player to craft recipes in the cauldron */
     public static final String PERMISSION_CRAFT = "alchema.craft";
+
+    public static final String PERMISSION_UPGRADES = "alchema.upgrades.";
+
+    public static final NamespacedKey UPGRADE_KEY = Alchema.key("upgrades");
 
 
     // General constants

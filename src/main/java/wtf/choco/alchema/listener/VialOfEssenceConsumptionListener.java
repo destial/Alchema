@@ -1,8 +1,5 @@
 package wtf.choco.alchema.listener;
 
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -10,12 +7,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.api.event.player.PlayerConsumeEntityEssenceEvent;
 import wtf.choco.alchema.essence.EntityEssenceData;
 import wtf.choco.alchema.util.AlchemaConstants;
 import wtf.choco.alchema.util.AlchemaEventFactory;
+
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class VialOfEssenceConsumptionListener implements Listener {
 

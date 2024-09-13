@@ -3,29 +3,31 @@ package wtf.choco.alchema.crafting;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
 import wtf.choco.alchema.essence.EntityEssenceData;
 import wtf.choco.alchema.essence.EntityEssenceEffectRegistry;
 import wtf.choco.alchema.util.AlchemaConstants;
+import wtf.choco.alchema.util.ItemUtil;
 import wtf.choco.commons.util.NamespacedKeyUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A {@link CauldronIngredient} implementation wrapped around an {@link EntityEssenceData}.
@@ -41,6 +43,7 @@ public class CauldronIngredientEntityEssence implements CauldronIngredient {
     private final EntityType entityType;
     private final EntityEssenceEffectRegistry essenceEffectRegistry;
     private final int amount;
+    private Map<Attribute, AttributeModifier> modifiers;
 
     /**
      * Construct a new {@link CauldronIngredientEntityEssence} with a given amount.
@@ -96,6 +99,16 @@ public class CauldronIngredientEntityEssence implements CauldronIngredient {
 
         this.essenceEffectRegistry = essenceEffectRegistry;
         this.amount = object.has("amount") ? object.get("amount").getAsInt() : 1;
+
+        if (object.has("modifiers")) {
+            this.modifiers = ItemUtil.parseModifiers(object.getAsJsonObject("modifiers"));
+        }
+    }
+
+    @Nullable
+    @Override
+    public Map<Attribute, AttributeModifier> getModifiers() {
+        return modifiers;
     }
 
     @NotNull
@@ -109,9 +122,8 @@ public class CauldronIngredientEntityEssence implements CauldronIngredient {
         return amount;
     }
 
-    @Nullable
     @Override
-    public ItemStack asItemStack() {
+    public @NotNull ItemStack asItemStack() {
         EntityEssenceData essenceData = essenceEffectRegistry.getEntityEssenceData(entityType);
         return essenceData != null ? essenceData.createItemStack(getAmount()) : EntityEssenceData.createEmptyVial();
     }
@@ -170,6 +182,8 @@ public class CauldronIngredientEntityEssence implements CauldronIngredient {
 
         object.addProperty("entity", entityType.getKey().toString());
         object.addProperty("amount", amount);
+        if (modifiers != null)
+            object.add("modifiers", ItemUtil.toJsonModifiers(modifiers));
 
         return object;
     }

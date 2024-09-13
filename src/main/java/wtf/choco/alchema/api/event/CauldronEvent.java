@@ -2,7 +2,6 @@ package wtf.choco.alchema.api.event;
 
 import org.bukkit.event.block.BlockEvent;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
 
 /**

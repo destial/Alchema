@@ -1,11 +1,9 @@
 package wtf.choco.alchema.api.event;
 
 import com.google.common.base.Preconditions;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.crafting.CauldronRecipe;
 import wtf.choco.alchema.crafting.CauldronRecipeRegistry;

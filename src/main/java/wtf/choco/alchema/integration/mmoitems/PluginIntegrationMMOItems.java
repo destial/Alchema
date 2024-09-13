@@ -1,12 +1,10 @@
 package wtf.choco.alchema.integration.mmoitems;
 
 import net.Indyuce.mmoitems.MMOItems;
-
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.commons.integration.PluginIntegration;
 

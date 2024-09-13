@@ -1,10 +1,5 @@
 package wtf.choco.alchema.metrics;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.AdvancedPie;
 import org.bstats.charts.SimplePie;
@@ -12,10 +7,14 @@ import org.bstats.charts.SingleLineChart;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.crafting.CauldronRecipeRegistry;
 import wtf.choco.alchema.util.AlchemaConstants;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A utility class handling statistics of custom Metrics charts.

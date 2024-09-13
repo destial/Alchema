@@ -1,16 +1,13 @@
 package wtf.choco.alchema.integration.mmoitems;
 
+import io.lumine.mythic.lib.api.item.NBTItem;
 import net.Indyuce.mmoitems.api.item.mmoitem.LiveMMOItem;
 import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-
 import wtf.choco.alchema.api.event.CauldronIngredientAddEvent;
 import wtf.choco.alchema.crafting.CauldronIngredientItemStack;
-
-import io.lumine.mythic.lib.api.item.NBTItem;
 
 /**
  * Event listeners for MMOItems plugin integration.

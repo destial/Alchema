@@ -1,7 +1,6 @@
 package wtf.choco.alchema.persistence;
 
 import com.google.common.base.Preconditions;
-
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.EntityType;

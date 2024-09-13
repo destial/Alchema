@@ -1,20 +1,18 @@
 package wtf.choco.alchema.cauldron;
 
 import com.google.common.base.Preconditions;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.api.event.CauldronIngredientsDropEvent;
 import wtf.choco.alchema.config.CauldronConfigurationContext;
 import wtf.choco.alchema.util.AlchemaConstants;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Responsible for the updating and ticking of in-world {@link AlchemicalCauldron} instances.

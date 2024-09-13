@@ -1,12 +1,9 @@
 package wtf.choco.alchema.listener;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -26,7 +23,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.api.event.entity.EntityDropEssenceEvent;
 import wtf.choco.alchema.api.event.player.PlayerEssenceCollectEvent;
@@ -36,6 +32,8 @@ import wtf.choco.alchema.util.AlchemaEventFactory;
 import wtf.choco.alchema.util.EssenceUtil;
 import wtf.choco.alchema.util.RefreshableEnumSets;
 import wtf.choco.commons.collection.RefreshableEnumSet;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class EntityEssenceCollectionListener implements Listener {
 

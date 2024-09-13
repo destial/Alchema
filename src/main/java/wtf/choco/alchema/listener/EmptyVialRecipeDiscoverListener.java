@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerRecipeDiscoverEvent;
 import org.bukkit.inventory.ShapedRecipe;
-
 import wtf.choco.alchema.util.AlchemaConstants;
 
 public final class EmptyVialRecipeDiscoverListener implements Listener {

@@ -6,23 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,7 +20,6 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import wtf.choco.alchema.cauldron.AlchemicalCauldron;
 import wtf.choco.alchema.cauldron.CauldronManager;
 import wtf.choco.alchema.cauldron.CauldronUpdateHandler;
@@ -63,6 +45,22 @@ import wtf.choco.alchema.util.AlchemaConstants;
 import wtf.choco.commons.integration.IntegrationHandler;
 import wtf.choco.commons.util.UpdateChecker;
 import wtf.choco.commons.util.UpdateChecker.UpdateReason;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * The main plugin class of Alchema.

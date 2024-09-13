@@ -1,17 +1,16 @@
 package wtf.choco.alchema.essence;
 
 import com.google.common.base.Preconditions;
-
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.bukkit.Color;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a registry by which {@link EntityType EntityTypes} may be mapped to their

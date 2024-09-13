@@ -23,6 +23,6 @@ public interface EssenceConsumptionCallback {
      * @param potency the potency of essence relative to max essence (0.0 - 1.0 where 0.0
      * is no essence and 1.0 is maximum essence)
      */
-    public void consume(@NotNull Player player, @NotNull EntityEssenceData essenceData, @NotNull ItemStack item, int amountOfEssence, float potency);
+    void consume(@NotNull Player player, @NotNull EntityEssenceData essenceData, @NotNull ItemStack item, int amountOfEssence, float potency);
 
 }

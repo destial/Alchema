@@ -1,18 +1,17 @@
 package wtf.choco.alchema.listener;
 
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.MetadataValue;
-
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.util.AlchemaConstants;
+
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public final class CauldronDeathMessageListener implements Listener {
 
