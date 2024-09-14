@@ -53,12 +53,6 @@ class SimpleCauldronRecipe implements CauldronRecipe {
 
     @NotNull
     @Override
-    public ItemStack getResult() {
-        return result.asItemStack();
-    }
-
-    @NotNull
-    @Override
     public CauldronRecipeResult getRecipeResult() {
         return result;
     }

@@ -109,6 +109,10 @@ public final class CauldronIngredientMMOItem implements CauldronIngredient {
         return modifiers;
     }
 
+    public void setModifiers(Map<Attribute, AttributeModifier> modifiers) {
+        this.modifiers = modifiers;
+    }
+
     @NotNull
     @Override
     public NamespacedKey getKey() {
@@ -138,14 +142,18 @@ public final class CauldronIngredientMMOItem implements CauldronIngredient {
     @Override
     public CauldronIngredient merge(@NotNull CauldronIngredient other) {
         Preconditions.checkArgument(other instanceof CauldronIngredientMMOItem, "Cannot merge %s with %s", getClass().getName(), other.getClass().getName());
-        return new CauldronIngredientMMOItem(mmoItem, item, getAmount() + other.getAmount());
+        CauldronIngredientMMOItem m = new CauldronIngredientMMOItem(mmoItem, item, getAmount() + other.getAmount());
+        m.setModifiers(modifiers);
+        return m;
     }
 
     @NotNull
     @Override
     public CauldronIngredient adjustAmountBy(int amount) {
         Preconditions.checkArgument(amount < getAmount(), "amount must be < getAmount(), %d", getAmount());
-        return new CauldronIngredientMMOItem(mmoItem, item, getAmount() + amount);
+        CauldronIngredientMMOItem m = new CauldronIngredientMMOItem(mmoItem, item, getAmount() + amount);
+        m.setModifiers(modifiers);
+        return m;
     }
 
     @Override

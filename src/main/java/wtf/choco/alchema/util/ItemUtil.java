@@ -2,6 +2,7 @@ package wtf.choco.alchema.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -118,7 +119,7 @@ public final class ItemUtil {
                 continue;
 
             String multi = perm.replace(AlchemaConstants.PERMISSION_UPGRADES, "");
-            int m = Integer.parseInt(multi);
+            int m = NumberUtils.toInt(multi, 0);
 
             if (m > highestMultiplier) {
                 highestMultiplier = m;

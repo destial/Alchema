@@ -79,6 +79,12 @@ public final class AlchemaConstants {
     /** Configuration path, Cauldron.DeathMessages */
     public static final String CONFIG_CAULDRON_DEATH_MESSAGES = "Cauldron.DeathMessages";
 
+    /** Configuration path, Cauldron.InvalidIngredient */
+    public static final String CONFIG_CAULDRON_INVALID_INGREDIENT = "Cauldron.InvalidIngredient";
+
+    /** Configuration path, Cauldron.MaxUpgrades */
+    public static final String CONFIG_CAULDRON_MAX_UPGRADES = "Cauldron.MaxUpgrades";
+
     /** Configuration path, Cauldron.Sound.AmbientBubbleVolume */
     public static final String CONFIG_CAULDRON_SOUND_AMBIENT_BUBBLE_VOLUME = "Cauldron.Sound.AmbientBubbleVolume";
 

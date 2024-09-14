@@ -115,6 +115,7 @@ public final class EntityEssenceEffectRegistry {
         Preconditions.checkArgument(registry != null, "registry must not be null");
 
         // A
+        register(registry, EntityType.ALLAY, 0x46B0B2, DefaultEntityEffects.ALLAY);
         register(registry, EntityType.AXOLOTL, 0xF59DE0, DefaultEntityEffects.AXOLOTL);
 
         // B

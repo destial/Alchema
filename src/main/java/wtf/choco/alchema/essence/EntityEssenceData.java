@@ -1,7 +1,7 @@
 package wtf.choco.alchema.essence;
 
 import com.google.common.base.Preconditions;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;

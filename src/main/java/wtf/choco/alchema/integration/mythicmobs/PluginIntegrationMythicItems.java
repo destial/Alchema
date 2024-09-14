@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 public final class PluginIntegrationMythicItems implements PluginIntegration {
 
     private final MythicBukkit mythicPlugin;
+    private final Map<String, Map<Attribute, AttributeModifier>> modifierMap;
 
     /**
      * Construct a new {@link PluginIntegrationMythicItems}.
@@ -39,6 +41,7 @@ public final class PluginIntegrationMythicItems implements PluginIntegration {
      */
     public PluginIntegrationMythicItems(@NotNull Plugin plugin) {
         this.mythicPlugin = (MythicBukkit) plugin;
+        modifierMap = new HashMap<>();
     }
 
     @NotNull
@@ -90,7 +93,7 @@ public final class PluginIntegrationMythicItems implements PluginIntegration {
 
                 String op = modifier.getString("operation", "add");
                 AttributeModifier.Operation operation = switch (op) {
-                    case "multiply", "multi", "scale" -> AttributeModifier.Operation.ADD_SCALAR;
+                    case "multiply", "multi", "scale" -> AttributeModifier.Operation.MULTIPLY_SCALAR_1;
                     default -> AttributeModifier.Operation.ADD_NUMBER;
                 };
 
@@ -99,6 +102,8 @@ public final class PluginIntegrationMythicItems implements PluginIntegration {
                 AttributeModifier mod = new AttributeModifier(UUID.randomUUID(), attribute.name(), amount, operation);
                 mods.put(attribute, mod);
             }
+
+            modifierMap.put(upgradeItem.getInternalName(), mods);
 
             for (MythicItem mmItem : mythicPlugin.getItemManager().getItems()) {
                 if (mmItem == upgradeItem)
@@ -132,7 +137,8 @@ public final class PluginIntegrationMythicItems implements PluginIntegration {
                 }
 
                 if ((mat.name().endsWith("_SWORD") ||
-                     mat.name().endsWith("_AXE")) &&
+                     mat.name().endsWith("_AXE") ||
+                     mat == Material.SHIELD || mat == Material.BLAZE_ROD || mat == Material.STICK || mat == Material.BAMBOO) &&
                      (type == UpgradeType.WEAPON|| type == UpgradeType.ALL)) {
                     CauldronRecipe.Builder builder = CauldronRecipe.builder(namespacedKey, new CauldronRecipeResultMythicItem(mmItem, 1))
                         .experience(experience)
@@ -166,10 +172,8 @@ public final class PluginIntegrationMythicItems implements PluginIntegration {
         }
     }
 
-    public enum UpgradeType {
-        ARMOR,
-        WEAPON,
-        ALL
+    public Map<String, Map<Attribute, AttributeModifier>> getModifierMap() {
+        return modifierMap;
     }
 
     @Override
@@ -188,6 +192,12 @@ public final class PluginIntegrationMythicItems implements PluginIntegration {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    public enum UpgradeType {
+        ARMOR,
+        WEAPON,
+        ALL
     }
 
 }

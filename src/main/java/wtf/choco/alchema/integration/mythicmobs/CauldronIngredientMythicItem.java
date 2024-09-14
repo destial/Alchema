@@ -71,7 +71,6 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
 
         if (object.has("modifiers")) {
             this.modifiers = ItemUtil.parseModifiers(object.getAsJsonObject("modifiers"));
-            Alchema.getInstance().getLogger().info("Ingredient " + mythicItem.getInternalName() + " has upgrade modifiers with " + modifiers.keySet());
         }
     }
 
@@ -105,14 +104,18 @@ public final class CauldronIngredientMythicItem implements CauldronIngredient {
     @Override
     public CauldronIngredient merge(@NotNull CauldronIngredient other) {
         Preconditions.checkArgument(other instanceof CauldronIngredientMythicItem, "Cannot merge %s with %s", getClass().getName(), other.getClass().getName());
-        return new CauldronIngredientMythicItem(mythicItem, item, getAmount() + other.getAmount());
+        CauldronIngredientMythicItem m = new CauldronIngredientMythicItem(mythicItem, item, getAmount() + other.getAmount());
+        m.setModifiers(modifiers);
+        return m;
     }
 
     @NotNull
     @Override
     public CauldronIngredient adjustAmountBy(int amount) {
         Preconditions.checkArgument(amount < getAmount(), "amount must be < getAmount(), %d", getAmount());
-        return new CauldronIngredientMythicItem(mythicItem, item, getAmount() + amount);
+        CauldronIngredientMythicItem m = new CauldronIngredientMythicItem(mythicItem, item, getAmount() + amount);
+        m.setModifiers(modifiers);
+        return m;
     }
 
     @Override

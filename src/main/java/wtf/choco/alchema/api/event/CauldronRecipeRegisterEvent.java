@@ -34,8 +34,8 @@ public class CauldronRecipeRegisterEvent extends Event {
      * @param recipeRegistry the recipe registry instance
      */
     public CauldronRecipeRegisterEvent(@NotNull CauldronRecipeRegistry recipeRegistry) {
+        super(true);
         Preconditions.checkArgument(recipeRegistry != null, "recipeRegistry must not be null");
-
         this.recipeRegistry = recipeRegistry;
     }
 

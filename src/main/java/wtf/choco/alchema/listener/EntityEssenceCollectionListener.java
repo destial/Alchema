@@ -48,7 +48,7 @@ public final class EntityEssenceCollectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     private void onEntityDeath(EntityDeathEvent event) {
-        Entity entity = event.getEntity();
+        LivingEntity entity = event.getEntity();
         EntityType type = entity.getType();
         if (deathBlacklist.contains(type)) {
             return;
@@ -72,12 +72,10 @@ public final class EntityEssenceCollectionListener implements Listener {
 
         int lootingModifier = 0;
 
-        if (entity instanceof LivingEntity livingEntity) {
-            Player killer = livingEntity.getKiller();
-            if (killer != null) {
-                ItemStack item = killer.getInventory().getItemInMainHand();
-                lootingModifier = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
-            }
+        Player killer = entity.getKiller();
+        if (killer != null) {
+            ItemStack item = killer.getInventory().getItemInMainHand();
+            lootingModifier = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
         }
 
         ThreadLocalRandom random = ThreadLocalRandom.current();

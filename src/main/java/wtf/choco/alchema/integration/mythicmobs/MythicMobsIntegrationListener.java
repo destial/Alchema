@@ -2,6 +2,7 @@ package wtf.choco.alchema.integration.mythicmobs;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.MythicItem;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -10,10 +11,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import wtf.choco.alchema.Alchema;
 import wtf.choco.alchema.api.event.CauldronIngredientAddEvent;
+import wtf.choco.alchema.api.event.CauldronIngredientsDropEvent;
 import wtf.choco.alchema.api.event.CauldronItemCraftEvent;
 import wtf.choco.alchema.api.event.CauldronRecipeRegisterEvent;
 import wtf.choco.alchema.api.event.player.PlayerEssenceCollectEvent;
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Event listeners for MMOItems plugin integration.
@@ -68,7 +72,10 @@ public final class MythicMobsIntegrationListener implements Listener {
         if (mythicItem == null)
             return;
 
-        event.setIngredient(new CauldronIngredientMythicItem(mythicItem, item, item.getAmount()));
+        CauldronIngredientMythicItem i = new CauldronIngredientMythicItem(mythicItem, item, item.getAmount());
+        Map<Attribute, AttributeModifier> mods = integration.getModifierMap().get(mythicItem.getInternalName());
+        i.setModifiers(mods);
+        event.setIngredient(i);
     }
 
     @EventHandler
@@ -87,18 +94,23 @@ public final class MythicMobsIntegrationListener implements Listener {
             return;
 
         if (event.getRecipe().getIngredients().stream().anyMatch(i -> i.getModifiers() != null)) {
-            CauldronIngredient original = event.getCauldron().getIngredients().stream().filter(i -> i.getModifiers() == null).findFirst().orElse(null);
-            if (original != null)
+            int amount = item.getAmount();
+            CauldronIngredient original = event.getCauldron().getIngredients().stream().filter(i -> (i.getModifiers() == null || i.getModifiers().isEmpty()) && event.getRecipe().hasIngredient(i)).findFirst().orElse(null);
+            if (original != null) {
                 item = original.asItemStack();
+                item.setAmount(amount);
+            }
         }
 
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             boolean updated = false;
             int upgrades = meta.getPersistentDataContainer().getOrDefault(AlchemaConstants.UPGRADE_KEY, PersistentDataType.INTEGER, 0);
-            if (upgrades > ItemUtil.getMaxUpgrades(event.getPlayer())) {
-                Alchema.getInstance().getLogger().info("Max upgrades!");
+            if (upgrades >= ItemUtil.getMaxUpgrades(event.getPlayer())) {
                 event.setCancelled(true);
+                event.getCauldron().dropIngredients(CauldronIngredientsDropEvent.Reason.MAX_UPGRADES, event.getPlayer())
+                        .forEach(i -> i.setMetadata(AlchemaConstants.METADATA_KEY_CAULDRON_CRAFTED, new FixedMetadataValue(Alchema.getInstance(), true)));
+                event.getPlayer().sendMessage(ChatColor.RED + Alchema.getInstance().getConfig().getString(AlchemaConstants.CONFIG_CAULDRON_MAX_UPGRADES));
                 return;
             }
 
@@ -124,14 +136,17 @@ public final class MythicMobsIntegrationListener implements Listener {
                             }
 
                             if (item.getType().name().endsWith("_SWORD") || item.getType().name().endsWith("_AXE") || item.getType().name().endsWith("BOW")
-                                || item.getType() == Material.BLAZE_ROD || item.getType() == Material.STICK || item.getType() == Material.BAMBOO) {
+                                || item.getType() == Material.BLAZE_ROD || item.getType() == Material.STICK || item.getType() == Material.BAMBOO || item.getType() == Material.SHIELD) {
                                 slots.add(EquipmentSlot.HAND);
                                 slots.add(EquipmentSlot.OFF_HAND);
                             }
                             for (EquipmentSlot slot : slots) {
-                                AttributeModifier modifier = new AttributeModifier(additiveMod.getUniqueId(), additiveMod.getName(), additiveMod.getAmount(), additiveMod.getOperation(), slot);
+                                AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), additiveMod.getName(), additiveMod.getOperation() == AttributeModifier.Operation.MULTIPLY_SCALAR_1 ?  additiveMod.getAmount() - 1 : additiveMod.getAmount(), additiveMod.getOperation(), slot);
                                 meta.addAttributeModifier(attribute, modifier);
                             }
+                            upgrades += mythicIngredient.getAmount();
+                            meta.getPersistentDataContainer().remove(AlchemaConstants.UPGRADE_KEY);
+                            meta.getPersistentDataContainer().set(AlchemaConstants.UPGRADE_KEY, PersistentDataType.INTEGER, upgrades);
                             updated = true;
                             continue;
                         }
@@ -167,7 +182,7 @@ public final class MythicMobsIntegrationListener implements Listener {
                     base += additiveMod.getAmount();
                 }
             }
-            case ADD_SCALAR -> {
+            case MULTIPLY_SCALAR_1 -> {
                 for (int i = 0; i < mythicIngredient.getAmount(); i++) {
                     base *= additiveMod.getAmount();
                 }

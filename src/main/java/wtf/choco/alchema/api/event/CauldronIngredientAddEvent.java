@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Item;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,7 @@ import java.util.UUID;
  *
  * @author Parker Hawke - Choco
  */
-public class CauldronIngredientAddEvent extends CauldronEvent {
+public class CauldronIngredientAddEvent extends CauldronEvent implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -34,6 +35,7 @@ public class CauldronIngredientAddEvent extends CauldronEvent {
     private final ItemStack itemStack;
     private final OfflinePlayer player;
     private final UUID playerUUID;
+    private boolean cancelled;
 
     /**
      * Construct a new {@link CauldronIngredientAddEvent}.
@@ -143,4 +145,13 @@ public class CauldronIngredientAddEvent extends CauldronEvent {
         return HANDLERS;
     }
 
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean caancel) {
+        this.cancelled = caancel;
+    }
 }

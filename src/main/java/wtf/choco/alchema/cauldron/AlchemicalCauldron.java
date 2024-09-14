@@ -476,13 +476,12 @@ public class AlchemicalCauldron {
      * @param force whether or not to ignore the cancellation state of the called event.
      * If this is true and the event is cancelled, items will still be dropped as if the
      * event was not cancelled.
-     *
-     * @return true if ingredients were cleared, false if cancelled by the
+     * <p>
      * {@link CauldronIngredientsDropEvent} and {@code force} was false
      */
-    public boolean dropIngredients(@Nullable CauldronIngredientsDropEvent.Reason reason, @Nullable Player player, boolean force) {
+    public List<Item> dropIngredients(@Nullable CauldronIngredientsDropEvent.Reason reason, @Nullable Player player, boolean force) {
         if (!hasIngredients()) {
-            return true;
+            return null;
         }
 
         List<@NotNull Item> items = new ArrayList<>();
@@ -492,7 +491,7 @@ public class AlchemicalCauldron {
         if (ingredientsDropEvent.isCancelled()) {
             items.forEach(Item::remove);
             ingredientsDropEvent.getItems().forEach(Item::remove);
-            return false;
+            return null;
         }
 
         // If an Item was removed in the event, remove it from the world
@@ -503,7 +502,7 @@ public class AlchemicalCauldron {
         }
 
         this.ingredients.clear();
-        return true;
+        return items;
     }
 
     /**
@@ -511,11 +510,10 @@ public class AlchemicalCauldron {
      *
      * @param reason the reason for the items to be dropped. null if none
      * @param player the player that caused the ingredients to drop. null if none
-     *
-     * @return true if ingredients were cleared, false if cancelled by the
+     * <p>
      * {@link CauldronIngredientsDropEvent}
      */
-    public boolean dropIngredients(@Nullable CauldronIngredientsDropEvent.Reason reason, @Nullable Player player) {
+    public List<Item> dropIngredients(@Nullable CauldronIngredientsDropEvent.Reason reason, @Nullable Player player) {
         return dropIngredients(reason, player, false);
     }
 
@@ -650,7 +648,16 @@ public class AlchemicalCauldron {
                     }
 
                     CauldronIngredientAddEvent ingredientAddEvent = AlchemaEventFactory.callCauldronIngredientAddEvent(this, ingredient, item);
-
+                    if (plugin.getRecipeRegistry().getRecipes().stream().noneMatch(r -> r.hasIngredient(ingredientAddEvent.getIngredient()))) {
+                        item.remove();
+                        ingredientAddEvent.getIngredient().drop(this, getWorld(), getLocation().add(0.5, 0.5, 0.5))
+                                .forEach(i -> i.setMetadata(AlchemaConstants.METADATA_KEY_CAULDRON_CRAFTED, new FixedMetadataValue(plugin, true)));
+                        if (itemThrower != null && itemThrower.isOnline()) {
+                            itemThrower.getPlayer()
+                                .sendMessage(ChatColor.RED + String.format(plugin.getConfig().getString(AlchemaConstants.CONFIG_CAULDRON_INVALID_INGREDIENT, ""), ingredientAddEvent.getIngredient().describe()));
+                        }
+                        return;
+                    }
                     this.addIngredient(ingredientAddEvent.getIngredient());
                     item.remove();
 

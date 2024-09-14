@@ -146,7 +146,11 @@ public class CauldronIngredientsDropEvent extends CauldronEvent implements Cance
         /**
          * A player did not have permission to craft the recipe.
          */
-        NO_PERMISSION;
+        NO_PERMISSION,
+
+        MAX_UPGRADES,
+
+        NO_VALID_RECIPE;
 
     }
 

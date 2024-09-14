@@ -3,7 +3,7 @@ package wtf.choco.alchema.crafting;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -137,14 +137,22 @@ public class CauldronIngredientEntityEssence implements CauldronIngredient {
     @Override
     public CauldronIngredient merge(@NotNull CauldronIngredient other) {
         Preconditions.checkArgument(other instanceof CauldronIngredientEntityEssence, "Cannot merge %s with %s", getClass().getName(), other.getClass().getName());
-        return new CauldronIngredientEntityEssence(entityType, essenceEffectRegistry, getAmount() + other.getAmount());
+        CauldronIngredientEntityEssence m = new CauldronIngredientEntityEssence(entityType, essenceEffectRegistry, getAmount() + other.getAmount());
+        m.setModifiers(modifiers);
+        return m;
     }
 
     @NotNull
     @Override
     public CauldronIngredient adjustAmountBy(int amount) {
         Preconditions.checkArgument(amount < getAmount(), "amount must be < getAmount(), %d", getAmount());
-        return new CauldronIngredientEntityEssence(entityType, essenceEffectRegistry, getAmount() + amount);
+        CauldronIngredientEntityEssence m = new CauldronIngredientEntityEssence(entityType, essenceEffectRegistry, getAmount() + amount);
+        m.setModifiers(modifiers);
+        return m;
+    }
+
+    public void setModifiers(Map<Attribute, AttributeModifier> modifiers) {
+        this.modifiers = modifiers;
     }
 
     @NotNull

@@ -352,7 +352,7 @@ public class CauldronRecipeRegistry {
                  * This also forces the event to be called AFTER all plugins have finished enabling and registering their listeners.
                  * runTask() is run on the next server tick which is done post-plugin enable.
                  */
-                Bukkit.getScheduler().runTask(plugin, () -> {
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                     AlchemaEventFactory.callCauldronRecipeRegisterEvent(this);
 
                     long timeToComplete = System.currentTimeMillis() - now;

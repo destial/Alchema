@@ -40,9 +40,9 @@ import java.util.concurrent.ThreadLocalRandom;
 final class DefaultEntityEffects {
 
     // A
-    static final EssenceConsumptionCallback AXOLOTL = (player, essenceData, item, amountOfEssence, potency) -> {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80 + (int) (potency * 60), 0, true));
-    };
+    static final EssenceConsumptionCallback AXOLOTL = (player, essenceData, item, amountOfEssence, potency) ->
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80 + (int) (potency * 60), 0, true));
+    static final EssenceConsumptionCallback ALLAY = null;
 
     // B
     static final EssenceConsumptionCallback BAT = (player, essenceData, item, amountOfEssence, potency) -> {

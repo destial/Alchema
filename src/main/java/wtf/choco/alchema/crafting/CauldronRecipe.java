@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.inventory.ItemStack;
@@ -36,18 +36,6 @@ public interface CauldronRecipe {
      * @return the key
      */
     @NotNull NamespacedKey getKey();
-
-    /**
-     * Get the result of this recipe.
-     *
-     * @return the result
-     *
-     * @deprecated use {@link #getRecipeResult()} instead
-     */
-    @NotNull
-    @ScheduledForRemoval(inVersion = "1.4.0")
-    @Deprecated(since = "1.3.0", forRemoval = true)
-    ItemStack getResult();
 
     /**
      * Get the result of this recipe.
@@ -308,23 +296,6 @@ public interface CauldronRecipe {
          * @param comment the comment to set
          *
          * @return this instance. Allows for chained method calls
-         *
-         * @deprecated poor naming. See {@link #comment(String)}. Will be removed in a future release
-         */
-        @NotNull
-        @ScheduledForRemoval(inVersion = "1.4.0")
-        @Deprecated(since = "1.2.0", forRemoval = true)
-        public CauldronRecipe.Builder setComment(@Nullable String comment) {
-            this.comment = comment; // Not calling #comment() because of the change in nullability handling
-            return this;
-        }
-
-        /**
-         * Set the comment for this recipe. Comments are purely aesthetic.
-         *
-         * @param comment the comment to set
-         *
-         * @return this instance. Allows for chained method calls
          */
         @NotNull
         public CauldronRecipe.Builder comment(@NotNull String comment) {
@@ -332,23 +303,6 @@ public interface CauldronRecipe {
 
             this.comment = comment;
             return this;
-        }
-
-        /**
-         * Set the experience to be yielded from crafting this recipe. The experience set is
-         * directly proportional to {@link ExperienceOrb#setExperience(int)}.
-         *
-         * @param experience the experience to set. Must be positive or 0
-         *
-         * @return this instance. Allows for chained method calls
-         *
-         * @deprecated poor naming. See {@link #experience(int)}. Will be removed in a future release
-         */
-        @NotNull
-        @ScheduledForRemoval(inVersion = "1.4.0")
-        @Deprecated(since = "1.2.0", forRemoval = true)
-        public CauldronRecipe.Builder setExperience(int experience) {
-            return experience(experience);
         }
 
         /**

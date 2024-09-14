@@ -15,6 +15,8 @@ Cauldron:
   DeathMessages:
     - "%s has boiled to death in a cauldron."
     - "%s was cooked in a cauldron."
+  InvalidIngredient: "%s is not a valid ingredient!"
+  MaxUpgrades: "You have reached max upgrades!"
   Sound:
     AmbientBubbleVolume: 0.45
     ItemSplashVolume: 1.0

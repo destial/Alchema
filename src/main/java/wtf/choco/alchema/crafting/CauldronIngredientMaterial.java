@@ -117,14 +117,18 @@ public class CauldronIngredientMaterial implements CauldronIngredient {
     @Override
     public CauldronIngredient merge(@NotNull CauldronIngredient other) {
         Preconditions.checkArgument(other instanceof CauldronIngredientMaterial, "Cannot merge %s with %s", getClass().getName(), other.getClass().getName());
-        return new CauldronIngredientMaterial(material, amount + other.getAmount());
+        CauldronIngredientMaterial m = new CauldronIngredientMaterial(material, amount + other.getAmount());
+        m.modifiers = modifiers;
+        return m;
     }
 
     @NotNull
     @Override
     public CauldronIngredient adjustAmountBy(int amount) {
         Preconditions.checkArgument(amount < getAmount(), "amount must be < getAmount(), %d", getAmount());
-        return new CauldronIngredientMaterial(material, getAmount() + amount);
+        CauldronIngredientMaterial m = new CauldronIngredientMaterial(material, getAmount() + amount);
+        m.modifiers = modifiers;
+        return m;
     }
 
     @NotNull
